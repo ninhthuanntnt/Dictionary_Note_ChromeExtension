@@ -1,0 +1,49 @@
+:root {
+    --light-green: #2bcf6f;
+    --light-blue: #3193c4;
+    --light-red : #d65c5c;
+}
+p{
+    margin: 0;
+}
+#ntnt-page-btn-translate {
+    width: fit-content;
+    height: 2.2em;
+    font-size: 1.1em;
+    font-weight: 600;
+
+    position: absolute;
+    z-index: 2147483647 !important;
+
+    color: white;
+    background-color: var(--light-green);
+
+    border: 2px solid var(--light-green);
+    border-radius: 10px;
+}
+
+#ntnt-page-btn-translate:hover {
+
+    color: var(--light-green);
+    background-color: white;
+
+    transition: all 0.3s;
+}
+
+#ntnt-page-popup-translate {
+    max-width: 400px;
+    min-width: 200px;
+    padding: 5px;
+
+    display: none;
+    opacity: 0;
+    position: absolute;
+    z-index: 2147483647 !important;
+
+    background-color: white;
+    border: 2px solid var(--light-blue);
+    border-radius: 10px;
+
+    transition-property: opacity, transform;
+    transition-duration: 0.3s;
+}

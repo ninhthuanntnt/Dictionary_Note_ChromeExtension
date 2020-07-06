@@ -1,0 +1,36 @@
+{
+	"name" : "Translate and note",
+	"description" : "This extension'll support you to translate words. Then you can note this words to learn it later",
+	"version" : "1.0.0",
+	"manifest_version" : 2,
+	"browser_action" : {
+		"default_title" : "NTNT",
+		"default_popup" : "popup/popup.html"
+	},
+	"background" : {
+		"persistent" : true,
+		"scripts" : [
+			"scripts/background.js"
+		]
+	},
+	"content_scripts" : [
+		{
+			"matches" : [
+				"http://*/*",
+				"https://*/*"
+			],
+			"js" : [
+				"scripts/jquery-3.5.1.js",
+				"scripts/content.js"
+			],
+			"css" : [
+				"styles/main.css"
+			]
+		}
+	],
+	"permissions" : [
+		"https://*/",
+		"storage",
+		"activeTab"
+	]
+}

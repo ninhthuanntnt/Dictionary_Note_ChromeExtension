@@ -1,0 +1,34 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="popup.css">
+    <title>NTTranslate</title>
+</head>
+<body>
+    <div>
+        <form class="ntnt-setting-language">
+            <label for="choose-language">Destination language: </label>
+            <select class="ntnt-select-box ntnt-select-box--border" name="language" id="chose-language">
+                <option class="ntnt-select-box__option" value="vn">Việt Nam</option>
+                <option class="ntnt-select-box__option" value="en">Tiếng anh</option>
+            </select>
+        </form>
+    </div>
+    <div>
+        <form class="ntnt-traslate-box">
+            <label for="data-translate">Enter text here</label>
+            <textarea id="" cols="10" rows="5" class="ntnt-traslate-box__input"></textarea>
+            <button class="ntnt-traslate-box__btn">Translate</button>
+        </form>
+    </div>
+    <div class="ntnt-dictionaries">
+        <p>Your words</p>
+        <ul>
+            <li>ABC</li>
+            <li>ABC</li>
+        </ul>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
