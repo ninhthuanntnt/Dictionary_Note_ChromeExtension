@@ -3,12 +3,27 @@
     --primary-dark: #0033cc; 
 }
 body{
-    width: max-content;
+    width: 300px;
 }
-*, p{
-    font-size: 1.1em;
+*, p, li{
+    font-size: 16px;
 }
-
+textarea{
+    resize: vertical;
+}
+::-webkit-scrollbar {
+    width: 15px;
+    /* height: 2em; */
+}
+/* ::-webkit-scrollbar-button {
+    background: #ccc
+} */
+::-webkit-scrollbar-track-piece {
+    background: #888
+}
+::-webkit-scrollbar-thumb {
+    background: #eee
+}​
 .ntnt-setting-language{
     display: flex;
     justify-content: center;
@@ -48,4 +63,29 @@ body{
 }
 .ntnt-traslate-box__btn:hover{
     background-color: var(--primary-dark);
+}
+
+#ntnt-data-note{
+    max-height: 300px;
+    padding-right: 16px;
+
+    word-wrap: break-word;
+
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+#ntnt-data-note > li{
+    margin-bottom: 10px;
+}
+.ntnt-data-note__word-header{
+    margin: 0;
+
+    font-weight: 600;
+}
+.ntnt-data-note__word-header::after{
+    content: ':';
+}
+.ntnt-data-note__word-content{
+    
 }

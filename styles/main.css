@@ -47,3 +47,36 @@ p{
     transition-property: opacity, transform;
     transition-duration: 0.3s;
 }
+
+.ntnt-row-data{
+    padding: 5px 5px;
+
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+}
+.ntnt-row-data > *{
+    margin: 0;
+    padding: 0;
+}
+
+.ntnt-row-data__btn-add{
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+
+    border: 2px solid var(--light-blue);
+    border-radius: 10px;
+
+    transition: opacity 0.2s;
+}
+
+.ntnt-row-data:hover > .ntnt-row-data__btn-add{
+    opacity: 0.8;
+}

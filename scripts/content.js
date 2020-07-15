@@ -1,9 +1,14 @@
-let btnTranslateId = 'ntnt-page-btn-translate';
-let popupTranslateId = 'ntnt-page-popup-translate';
+let BTN_TRANSLATE_ID = 'ntnt-page-btn-translate';
+let POP_UP_TRANSLATE_ID = 'ntnt-page-popup-translate';
+let BTN_ADD_TO_NOTE_CLASS = 'ntnt-row-data__btn-add';
+
+let port1 = chrome.runtime.connect(null, { name: 'port1' });
+
+let currentWord = null;
 document.body.addEventListener('mousedown', (e) => {
     console.log('mouse down');
-    let btnTranslate = this.document.getElementById(btnTranslateId);
-    let popupTranslate = document.getElementById(popupTranslateId);
+    let btnTranslate = this.document.getElementById(BTN_TRANSLATE_ID);
+    let popupTranslate = document.getElementById(POP_UP_TRANSLATE_ID);
     removeElement(popupTranslate);
     removeElement(btnTranslate);
 });
@@ -18,8 +23,9 @@ document.body.addEventListener('mouseup', (event) => {
     } else if (document.selection && document.selection.type != "Control") {
         text = document.selection.createRange().text;
     }
+    currentWord = text;
     //get position of cursor to show button translate
-    let btnTranslate = document.getElementById(btnTranslateId);
+    let btnTranslate = document.getElementById(BTN_TRANSLATE_ID);
 
     if (text.trim() !== "") {
         console.log(text);
@@ -30,17 +36,14 @@ document.body.addEventListener('mouseup', (event) => {
         if (btnTranslate === null) {
             console.log('create new button');
             btnTranslate = this.document.createElement("button");
-            btnTranslate.setAttribute('id', btnTranslateId);
+            btnTranslate.setAttribute('id', BTN_TRANSLATE_ID);
             btnTranslate.innerText = 'Translate';
             document.body.append(btnTranslate);
 
             btnTranslate.onmouseup = (e) => {
                 console.log('btn clicked');
                 removeElement(btnTranslate);
-
                 showPopup();
-
-
                 e.stopPropagation();
             };
             btnTranslate.onmousedown = (e) => {
@@ -48,30 +51,29 @@ document.body.addEventListener('mouseup', (event) => {
             }
         }
         // connect to background.js
-        let port = chrome.runtime.connect(null, { name: 'port1' });
 
-        port.postMessage({ type: 'word', value: text });
+        port1.postMessage({ type: 'word', value: text });
 
-        port.onMessage.addListener(function (msg, sender) {
+        port1.onMessage.addListener(function (msg, sender) {
             if (msg.type == 'word') {
                 let divTag = document.createElement('div');
                 divTag.innerHTML = msg.value.htmlStr;
                 document.body.append(createPopup(divTag, posX, posY));
 
-                let popupTranslate = document.getElementById(popupTranslateId);
+                let popupTranslate = document.getElementById(POP_UP_TRANSLATE_ID);
                 popupTranslate.onmousedown = (e) => {
                     e.stopPropagation();
                 }
                 popupTranslate.onmouseup = (e) => {
                     e.stopPropagation();
                 }
-                port.disconnect();
+                // port1.disconnect();
             }
         });
 
-        port.onDisconnect.addListener(obj => {
-            console.log('disconnected port');
-        });
+        // port1.onDisconnect.addListener(obj => {
+        //     console.log('disconnected port');
+        // });
         btnTranslate.style.top = `${posY}px`;
         btnTranslate.style.left = `${posX}px`;
 
@@ -87,12 +89,12 @@ function removeElement(el) {
 function createPopup(innerDiv, posX, posY) {
     let popupDiv = document.createElement('div');
     popupDiv.setAttribute('class', 'content-popup');
-    popupDiv.setAttribute('id', popupTranslateId);
+    popupDiv.setAttribute('id', POP_UP_TRANSLATE_ID);
     popupDiv.style.top = `${posY}px`;
     popupDiv.style.left = `${posX}px`;
     if (innerDiv.innerText.trim().length > 0) {
         popupDiv.append(innerDiv);
-    }else{
+    } else {
         let pTemp1 = document.createElement('p'), pTemp2 = document.createElement('p');
         pTemp1.innerText = 'Không có kết quả';
         pTemp1.style.color = 'var(--light-red)';
@@ -108,10 +110,24 @@ function createPopup(innerDiv, posX, posY) {
 }
 
 function showPopup() {
-    let popupTranslate = document.getElementById(popupTranslateId);
+    let popupTranslate = document.getElementById(POP_UP_TRANSLATE_ID);
     popupTranslate.style.display = 'block';
     setTimeout(() => {
         popupTranslate.style.opacity = 1;
         popupTranslate.style.transform = 'translateX(5px)';
     }, 1);
+
+
+    Array.from(document.getElementsByClassName('ntnt-row-data__btn-add')).forEach((e) => {
+        e.onclick = () => {
+            var data = e.previousSibling.innerText;
+            port1.postMessage({
+                type: 'word-add',
+                value: {
+                    rootWord: currentWord,
+                    translatedWord: data
+                }
+            });
+        }
+    });
 }

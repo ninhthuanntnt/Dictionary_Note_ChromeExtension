@@ -10,6 +10,7 @@
 	"background" : {
 		"persistent" : true,
 		"scripts" : [
+			"scripts/constant.js",
 			"scripts/background.js"
 		]
 	},
@@ -21,6 +22,7 @@
 			],
 			"js" : [
 				"scripts/jquery-3.5.1.js",
+				"scripts/constant.js",
 				"scripts/content.js"
 			],
 			"css" : [

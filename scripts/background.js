@@ -4,7 +4,7 @@ function getContent(strHtml) {
     let htmlStr = strHtml.slice(startDataHtmlIndex, endOfDataHtmlIndex);
     let htmlObj = document.createElement('div');
     htmlObj.innerHTML = htmlStr;
-    
+
     let returnDiv = document.createElement('div');
     let currentWord = htmlObj.querySelector('.thisword').innerText;
     // Add header word
@@ -18,18 +18,33 @@ function getContent(strHtml) {
 
     while (textNode = textNodeIterator.nextNode()) {
         let curText = textNode.textContent;
-        if (curText.trim().length != 0 && (i >= 12 && i<=20 )) {
+        if (curText.trim().length != 0 && (i >= 12 && i <= 20)) {
+            let divWrapper = document.createElement('div');
             let pTag = document.createElement('p');
+            let btnAddTag = document.createElement('button');
+
+            //create a btn tag and a p tag inside a row data
             pTag.innerText = curText;
-            returnDiv.append(pTag);
+            btnAddTag.innerHTML = '<b>+</b>';
+
+            // init css
+            divWrapper.classList.add('ntnt-row-data');
+            btnAddTag.classList.add('ntnt-row-data__btn-add');
+
+            // append tags
+            divWrapper.append(pTag);
+            divWrapper.append(btnAddTag);
+
+            returnDiv.append(divWrapper);
         }
         i++;
     }
-    console.log(htmlObj);
-    return {htmlStr: returnDiv.innerHTML,
-            currentWord: currentWord};
-}
 
+    return {
+        htmlStr: returnDiv.innerHTML,
+        currentWord: currentWord
+    };
+}
 
 chrome.runtime.onConnect.addListener(port => {
     console.log('connected ', port);
@@ -37,6 +52,8 @@ chrome.runtime.onConnect.addListener(port => {
     if (port.name == 'port1') {
         port.onMessage.addListener(function (msg, sender) {
             if (msg.type == 'word') {
+
+                //get the translated data by using ajax
                 let xhr = new XMLHttpRequest();
                 xhr.open('GET', `http://vndic.net/index.php?word=${msg.value}&dict=en_vi`);
                 xhr.onreadystatechange = () => {
@@ -49,30 +66,25 @@ chrome.runtime.onConnect.addListener(port => {
                     }
                 };
                 xhr.send();
+
+
+            }
+            if(msg.type == 'word-add'){
+                addToLocalStorage(msg.value);
             }
         });
     }
 });
-// chrome.runtime.onMessage.addListener({
-//     function(request, sender, sendResponse) {
-//         if (request.contentScriptQuery == "getWord") {
-//             // var xhr = new XMLHttpRequest();
-//             // xhr.open('GET', 'https://jsonplaceholder.typicode.com/todos/1');
-//             // xhr.onreadystatechange = () => {
-//             //     if (xhr.status == 200 && xhr.readyState == 4) {
-//             //         sendResponse(xhr.responseText);
-//             //         console.log(xhr.responseText);
-//             //     }
-//             // };
-//             // xhr.send();
-//             // fetch('https://jsonplaceholder.typicode.com/todos/1')
-//             //     .then(response => response.text())
-//             //     .then(text => sendResponse(text))
-//             //     .catch(error => console.log(error))
-//             console.log(request);
-//             console.log(sender);
-//             console.log(sendResponse);
-//             sendResponse({ data: 'abc' });
-//         }
-//     }
-// });
+
+function addToLocalStorage(object){
+    let strData = localStorage.getItem(NTNT_LOCAL_STORAGE_KEY);
+    
+    //curData must be an array
+    let curData = [];
+    if(strData)
+        curData = JSON.parse(strData);
+    curData.push(object);
+
+    //save to local storage
+    localStorage.setItem(NTNT_LOCAL_STORAGE_KEY, JSON.stringify(curData));
+}
