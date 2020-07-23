@@ -81,9 +81,20 @@ function addToLocalStorage(object){
     
     //curData must be an array
     let curData = [];
+    let existed = false;
     if(strData)
         curData = JSON.parse(strData);
-    curData.push(object);
+
+    curData.map(obj =>{
+        if(obj.rootWord == object.rootWord){
+            obj.translatedWord = object.translatedWord;
+            existed = true;
+        }
+        return obj;
+    });
+
+    if(!existed)
+        curData.push(object);
 
     //save to local storage
     localStorage.setItem(NTNT_LOCAL_STORAGE_KEY, JSON.stringify(curData));
