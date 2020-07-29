@@ -1,22 +1,37 @@
-let BTN_TRANSLATE_ID = 'ntnt-page-btn-translate';
-let POP_UP_TRANSLATE_ID = 'ntnt-page-popup-translate';
-let BTN_ADD_TO_NOTE_CLASS = 'ntnt-row-data__btn-add';
-
 let port1 = chrome.runtime.connect(null, { name: 'port1' });
-
 let currentWord = null;
+let isLoading = true;
+let translatePopup = document.createElement('div');
+let btnTranslate = this.document.createElement("button");
+
+
+translatePopup.setAttribute('class', 'content-popup');
+translatePopup.setAttribute('id', POP_UP_TRANSLATE_ID);
+hideElement(translatePopup);
+document.body.append(translatePopup);
+
+btnTranslate.setAttribute('id', BTN_TRANSLATE_ID);
+btnTranslate.innerText = 'Translate';
+hideElement(btnTranslate);
+document.body.append(btnTranslate);
+
+
+
+
+
 document.body.addEventListener('mousedown', (e) => {
     console.log('mouse down');
     let btnTranslate = this.document.getElementById(BTN_TRANSLATE_ID);
-    let popupTranslate = document.getElementById(POP_UP_TRANSLATE_ID);
-    removeElement(popupTranslate);
-    removeElement(btnTranslate);
+    let translatePopup = document.getElementById(POP_UP_TRANSLATE_ID);
+
+    hideElement(translatePopup);
+    hideElement(btnTranslate)
 });
 
 document.body.addEventListener('mouseup', (event) => {
     console.log('body mouseup');
-
     //get text to translate
+
     let text = "";
     if (window.getSelection) {
         text = window.getSelection().toString();
@@ -27,27 +42,24 @@ document.body.addEventListener('mouseup', (event) => {
     //get position of cursor to show button translate
     let btnTranslate = document.getElementById(BTN_TRANSLATE_ID);
 
-    if (text.trim() !== "") {
+    if (text.trim() != "") {
         console.log(text);
         isSelecting = true;
         let posX = event.pageX;
         let posY = event.pageY;
 
-        if (btnTranslate === null) {
+        if (btnTranslate.style.display == 'none') {
             console.log('create new button');
-            btnTranslate = this.document.createElement("button");
-            btnTranslate.setAttribute('id', BTN_TRANSLATE_ID);
-            btnTranslate.innerText = 'Translate';
-            document.body.append(btnTranslate);
+            showElement(btnTranslate, posX, posY)
 
             btnTranslate.onmouseup = (e) => {
                 console.log('btn clicked');
-                removeElement(btnTranslate);
-                showPopup();
+                hideElement(btnTranslate);
+                showPopupAt(posX, posY);
                 e.stopPropagation();
             };
             btnTranslate.onmousedown = (e) => {
-                e.stopPropagation();
+                e.stopPropagation()
             }
         }
         // connect to background.js
@@ -57,14 +69,15 @@ document.body.addEventListener('mouseup', (event) => {
         port1.onMessage.addListener(function (msg, sender) {
             if (msg.type == 'word') {
                 let divTag = document.createElement('div');
-                divTag.innerHTML = msg.value.htmlStr;
-                document.body.append(createPopup(divTag, posX, posY));
 
-                let popupTranslate = document.getElementById(POP_UP_TRANSLATE_ID);
-                popupTranslate.onmousedown = (e) => {
+                divTag.innerHTML = msg.value.htmlStr;
+
+                setDataToTranslatePopup(divTag);
+
+                translatePopup.onmousedown = (e) => {
                     e.stopPropagation();
                 }
-                popupTranslate.onmouseup = (e) => {
+                translatePopup.onmouseup = (e) => {
                     e.stopPropagation();
                 }
                 // port1.disconnect();
@@ -74,8 +87,6 @@ document.body.addEventListener('mouseup', (event) => {
         // port1.onDisconnect.addListener(obj => {
         //     console.log('disconnected port');
         // });
-        btnTranslate.style.top = `${posY}px`;
-        btnTranslate.style.left = `${posX}px`;
 
         console.log(event);
     }
@@ -86,14 +97,11 @@ function removeElement(el) {
     }
 }
 
-function createPopup(innerDiv, posX, posY) {
-    let popupDiv = document.createElement('div');
-    popupDiv.setAttribute('class', 'content-popup');
-    popupDiv.setAttribute('id', POP_UP_TRANSLATE_ID);
-    popupDiv.style.top = `${posY}px`;
-    popupDiv.style.left = `${posX}px`;
+function setDataToTranslatePopup(innerDiv) {
+    translatePopup.innerHTML = "";
+
     if (innerDiv.innerText.trim().length > 0) {
-        popupDiv.append(innerDiv);
+        translatePopup.append(innerDiv);
     } else {
         let pTemp1 = document.createElement('p'), pTemp2 = document.createElement('p');
         pTemp1.innerText = 'Không có kết quả';
@@ -103,21 +111,36 @@ function createPopup(innerDiv, posX, posY) {
         pTemp2.innerText = '(Từ không nên có đuôi \'s\',\'ed\',\'ing\' để tăng độ chính xác)';
         pTemp2.style.color = 'var(--light-blue)';
         pTemp2.style.fontWeight = 500;
-        popupDiv.append(pTemp1);
-        popupDiv.append(pTemp2);
+        translatePopup.append(pTemp1);
+        translatePopup.append(pTemp2);
     }
-    return popupDiv;
+
 }
 
-function showPopup() {
-    let popupTranslate = document.getElementById(POP_UP_TRANSLATE_ID);
-    popupTranslate.style.display = 'block';
+function showElement(element, posX = "0px", posY = "0px") {
+    element.style.display = "block";
+
+    element.style.top = `${posY}px`;
+    element.style.left = `${posX}px`;
+}
+
+function hideElement(element) {
+    element.style.display = "none";
+}
+
+function showPopupAt(posX, posY) {
+    showElement(translatePopup, posX, posY);
+
+    translatePopup.style.transform = '';
+    translatePopup.style.opacity = 0;
+
     setTimeout(() => {
-        popupTranslate.style.opacity = 1;
-        popupTranslate.style.transform = 'translateX(5px)';
+        console.log("animated");
+        translatePopup.style.opacity = 1;
+        translatePopup.style.transform = 'translateX(5px)';
     }, 1);
 
-
+    // TODO: Sometimes, click event doesn't work. Because have the same event
     Array.from(document.getElementsByClassName('ntnt-row-data__btn-add')).forEach((e) => {
         e.onclick = () => {
             var data = e.previousSibling.innerText;

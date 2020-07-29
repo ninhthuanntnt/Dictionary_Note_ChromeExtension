@@ -1,8 +1,10 @@
 :root{
     --primary: #3366ff;
     --primary-dark: #0033cc; 
+    --del: #ff6666;
 }
 body{
+    font-family: 'Varela Round';
     width: 300px;
 }
 
@@ -100,18 +102,17 @@ textarea{
     position: relative;
 }
 .ntnt-data-note__row:hover{
-    border: 1.5px solid var(--primary);
     border-radius: 10px;
 }
 .ntnt-data-note__row:hover::after{
     content: "X";
+    font-weight: 800;
     padding: 5px;
 
     position: absolute;
     right: 0px;
     top: 0px;
 
-    background-color: red;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
+    background-color: var(--del);
+    border-radius: 5px;
 }
