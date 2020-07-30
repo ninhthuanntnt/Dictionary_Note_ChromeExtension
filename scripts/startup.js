@@ -6,5 +6,5 @@ var defaultLocalData = {
     }
 }
 if(localDataStr == null){
-    localStorage.setItem(JSON.stringify(defaultLocalData));
+    localStorage.setItem(NTNT_LOCAL_STORAGE_KEY, JSON.stringify(defaultLocalData));
 }

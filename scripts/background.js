@@ -1,4 +1,4 @@
-var langCode = DEFAULT_LANG_CODE;
+var langCode = JSON.parse(localStorage.getItem(NTNT_LOCAL_STORAGE_KEY)).settings.langCode;
 
 function getContent(strHtml) {
     let startDataHtmlIndex = strHtml.lastIndexOf('<td valign="top">');
@@ -61,6 +61,7 @@ chrome.runtime.onConnect.addListener(port => {
                 xhr.open('GET', `http://vndic.net/index.php?word=${msg.value}&dict=${langCode}`);
                 xhr.onreadystatechange = () => {
                     if (xhr.status == 200 && xhr.readyState == 4) {
+                        console.log(xhr.responseText);
                         let contentHtml = getContent(xhr.responseText);
                         port.postMessage({
                             type: msg.type,
@@ -73,6 +74,14 @@ chrome.runtime.onConnect.addListener(port => {
             }
             if(msg.type == 'word-add'){
                 addToLocalStorage(msg.value);
+            }
+            
+        });
+    }
+    if(port.name == "port2"){
+        port.onMessage.addListener(function (msg, sender) {
+            if(msg.type == "change-lang-code"){
+                langCode = msg.value;
             }
         });
     }

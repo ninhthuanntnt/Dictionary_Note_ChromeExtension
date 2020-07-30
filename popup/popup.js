@@ -1,13 +1,29 @@
+var port2 = chrome.runtime.connect(null, { name: 'port2' });
 var datas = JSON.parse(localStorage.getItem(NTNT_LOCAL_STORAGE_KEY));
 var divDatasId = 'ntnt-data-note';
 
-// binding events
-
 // set default selected;
 
+var langOptions = document.querySelectorAll(".ntnt-select-box__option");
+Array.from(langOptions).forEach(
+    (el) => {
+        if(el.value == datas.settings.langCode){
+            el.selected = true;
+        }else
+            el.selected = false;
+    }   
+)
+
+// binding events
+
 var langSelect = document.getElementById("choose-language");
-langSelect.onchange = ()=>{
-    default_lang_code = langSelect.value;
+langSelect.onchange = () => {
+    datas.settings.langCode = langSelect.value;
+    localStorage.setItem(NTNT_LOCAL_STORAGE_KEY, JSON.stringify(datas));
+    port2.postMessage({
+        type: "change-lang-code",
+        value: langSelect.value
+    });
 }
 
 // create element
@@ -30,7 +46,7 @@ if (datas) {
         //add class
         liTag.classList.add('ntnt-data-note__row');
         pTagInLiTag.classList.add('ntnt-data-note__word-header');
-        liTagInUlTag.classList.add('ntnt-data-note__word-content');;
+        liTagInUlTag.classList.add('ntnt-data-note__word-content');
 
         pTagInLiTag.innerText = data.rootWord;
         liTagInUlTag.innerText = data.translatedWord;
