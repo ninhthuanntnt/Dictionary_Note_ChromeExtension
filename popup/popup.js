@@ -1,6 +1,15 @@
 var datas = JSON.parse(localStorage.getItem(NTNT_LOCAL_STORAGE_KEY));
 var divDatasId = 'ntnt-data-note';
 
+// binding events
+
+// set default selected;
+
+var langSelect = document.getElementById("choose-language");
+langSelect.onchange = ()=>{
+    default_lang_code = langSelect.value;
+}
+
 // create element
 /* 
 <li>
@@ -11,10 +20,8 @@ var divDatasId = 'ntnt-data-note';
     </ul>
 </li> 
 */
-
-console.log(datas);
 if (datas) {
-    for (let data of datas) {
+    for (let data of datas.savedWord) {
         let liTag = document.createElement('li');
         let pTagInLiTag = document.createElement('p');
         let ulTagInLiTag = document.createElement('ul');
@@ -48,13 +55,11 @@ Array.from(document.getElementsByClassName('ntnt-data-note__row')).forEach(obj =
 });
 
 function deleteWord(word) {
-    let localData = JSON.parse(localStorage.getItem(NTNT_LOCAL_STORAGE_KEY));
-    console.log(localData);
-    localData = localData.filter((obj) => {
+    datas.savedWord = datas.savedWord.filter((obj) => {
         if (obj.rootWord == word)
             return false;
         return true;
     });
 
-    localStorage.setItem(NTNT_LOCAL_STORAGE_KEY, JSON.stringify(localData));
-}   
+    localStorage.setItem(NTNT_LOCAL_STORAGE_KEY, JSON.stringify(datas));
+}

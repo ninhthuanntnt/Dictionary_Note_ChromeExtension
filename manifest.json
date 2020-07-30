@@ -11,6 +11,7 @@
 		"persistent" : true,
 		"scripts" : [
 			"scripts/constant.js",
+			"scripts/startup.js",
 			"scripts/background.js"
 		]
 	},
@@ -21,7 +22,6 @@
 				"https://*/*"
 			],
 			"js" : [
-				"scripts/jquery-3.5.1.js",
 				"scripts/constant.js",
 				"scripts/content.js"
 			],

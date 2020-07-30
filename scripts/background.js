@@ -1,3 +1,5 @@
+var langCode = DEFAULT_LANG_CODE;
+
 function getContent(strHtml) {
     let startDataHtmlIndex = strHtml.lastIndexOf('<td valign="top">');
     let endOfDataHtmlIndex = strHtml.indexOf('</td>', startDataHtmlIndex) + '</td>'.length;
@@ -53,9 +55,10 @@ chrome.runtime.onConnect.addListener(port => {
         port.onMessage.addListener(function (msg, sender) {
             if (msg.type == 'word') {
 
+                console.log(langCode);
                 //get the translated data by using ajax
                 let xhr = new XMLHttpRequest();
-                xhr.open('GET', `http://vndic.net/index.php?word=${msg.value}&dict=en_vi`);
+                xhr.open('GET', `http://vndic.net/index.php?word=${msg.value}&dict=${langCode}`);
                 xhr.onreadystatechange = () => {
                     if (xhr.status == 200 && xhr.readyState == 4) {
                         let contentHtml = getContent(xhr.responseText);
@@ -67,7 +70,6 @@ chrome.runtime.onConnect.addListener(port => {
                 };
                 xhr.send();
 
-
             }
             if(msg.type == 'word-add'){
                 addToLocalStorage(msg.value);
@@ -78,14 +80,10 @@ chrome.runtime.onConnect.addListener(port => {
 
 function addToLocalStorage(object){
     let strData = localStorage.getItem(NTNT_LOCAL_STORAGE_KEY);
-    
-    //curData must be an array
-    let curData = [];
     let existed = false;
-    if(strData)
-        curData = JSON.parse(strData);
+    let curData = JSON.parse(strData);
 
-    curData.map(obj =>{
+    curData.savedWord.map(obj =>{
         if(obj.rootWord == object.rootWord){
             obj.translatedWord = object.translatedWord;
             existed = true;
@@ -94,7 +92,7 @@ function addToLocalStorage(object){
     });
 
     if(!existed)
-        curData.push(object);
+        curData.savedWord.push(object);
 
     //save to local storage
     localStorage.setItem(NTNT_LOCAL_STORAGE_KEY, JSON.stringify(curData));

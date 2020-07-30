@@ -4,7 +4,7 @@ let isLoading = true;
 let translatePopup = document.createElement('div');
 let btnTranslate = this.document.createElement("button");
 
-
+// init html
 translatePopup.setAttribute('class', 'content-popup');
 translatePopup.setAttribute('id', POP_UP_TRANSLATE_ID);
 hideElement(translatePopup);
@@ -14,10 +14,6 @@ btnTranslate.setAttribute('id', BTN_TRANSLATE_ID);
 btnTranslate.innerText = 'Translate';
 hideElement(btnTranslate);
 document.body.append(btnTranslate);
-
-
-
-
 
 document.body.addEventListener('mousedown', (e) => {
     console.log('mouse down');
@@ -29,14 +25,16 @@ document.body.addEventListener('mousedown', (e) => {
 });
 
 document.body.addEventListener('mouseup', (event) => {
-    console.log('body mouseup');
     //get text to translate
-
     let text = "";
     if (window.getSelection) {
+
         text = window.getSelection().toString();
+
     } else if (document.selection && document.selection.type != "Control") {
+
         text = document.selection.createRange().text;
+
     }
     currentWord = text;
     //get position of cursor to show button translate
@@ -53,9 +51,10 @@ document.body.addEventListener('mouseup', (event) => {
             showElement(btnTranslate, posX, posY)
 
             btnTranslate.onmouseup = (e) => {
-                console.log('btn clicked');
+
                 hideElement(btnTranslate);
                 showPopupAt(posX, posY);
+
                 e.stopPropagation();
             };
             btnTranslate.onmousedown = (e) => {
@@ -87,8 +86,6 @@ document.body.addEventListener('mouseup', (event) => {
         // port1.onDisconnect.addListener(obj => {
         //     console.log('disconnected port');
         // });
-
-        console.log(event);
     }
 });
 function removeElement(el) {
@@ -102,6 +99,19 @@ function setDataToTranslatePopup(innerDiv) {
 
     if (innerDiv.innerText.trim().length > 0) {
         translatePopup.append(innerDiv);
+
+        Array.from(document.getElementsByClassName('ntnt-row-data__btn-add')).forEach((e) => {
+            e.onclick = () => {
+                var data = e.previousSibling.innerText;
+                port1.postMessage({
+                    type: 'word-add',
+                    value: {
+                        rootWord: currentWord,
+                        translatedWord: data
+                    }
+                });
+            }
+        });
     } else {
         let pTemp1 = document.createElement('p'), pTemp2 = document.createElement('p');
         pTemp1.innerText = 'Không có kết quả';
@@ -139,18 +149,5 @@ function showPopupAt(posX, posY) {
         translatePopup.style.opacity = 1;
         translatePopup.style.transform = 'translateX(5px)';
     }, 1);
-
-    // TODO: Sometimes, click event doesn't work. Because have the same event
-    Array.from(document.getElementsByClassName('ntnt-row-data__btn-add')).forEach((e) => {
-        e.onclick = () => {
-            var data = e.previousSibling.innerText;
-            port1.postMessage({
-                type: 'word-add',
-                value: {
-                    rootWord: currentWord,
-                    translatedWord: data
-                }
-            });
-        }
-    });
+    
 }

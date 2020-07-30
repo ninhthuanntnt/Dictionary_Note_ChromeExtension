@@ -1,4 +1,5 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,13 +7,14 @@
     <link rel="stylesheet" href="popup.css">
     <title>NTTranslate</title>
 </head>
+
 <body>
     <div>
         <form class="ntnt-setting-language">
             <label for="choose-language">Destination language: </label>
-            <select class="ntnt-select-box ntnt-select-box--border" name="language" id="chose-language">
-                <option class="ntnt-select-box__option" value="vn">Việt Nam</option>
-                <option class="ntnt-select-box__option" value="en">Tiếng anh</option>
+            <select class="ntnt-select-box ntnt-select-box--border" name="language" id="choose-language">
+                <option class="ntnt-select-box__option" value="vi_en">Việt Nam - Tiếng Anh</option>
+                <option class="ntnt-select-box__option" value="en_vi" selected>English - Vietnamese</option>
             </select>
         </form>
     </div>
@@ -32,4 +34,5 @@
     <script src="../scripts/constant.js"></script>
     <script src="popup.js"></script>
 </body>
+
 </html>
