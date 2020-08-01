@@ -149,5 +149,5 @@ function showPopupAt(posX, posY) {
         translatePopup.style.opacity = 1;
         translatePopup.style.transform = 'translateX(5px)';
     }, 1);
-    
+
 }

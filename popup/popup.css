@@ -51,6 +51,14 @@ textarea{
     display: flex;
     flex-direction: column;
 }
+.ntnt-translate-box__choose-language{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 1em 0;
+}
 .ntnt-traslate-box__input{
     border: 2px solid var(--primary);
 }

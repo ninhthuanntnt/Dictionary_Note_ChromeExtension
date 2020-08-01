@@ -1,6 +1,6 @@
 var langCode = JSON.parse(localStorage.getItem(NTNT_LOCAL_STORAGE_KEY)).settings.langCode;
 
-function getContent(strHtml) {
+function getContentVNDICT(strHtml) {
     let startDataHtmlIndex = strHtml.lastIndexOf('<td valign="top">');
     let endOfDataHtmlIndex = strHtml.indexOf('</td>', startDataHtmlIndex) + '</td>'.length;
     let htmlStr = strHtml.slice(startDataHtmlIndex, endOfDataHtmlIndex);
@@ -62,7 +62,7 @@ chrome.runtime.onConnect.addListener(port => {
                 xhr.onreadystatechange = () => {
                     if (xhr.status == 200 && xhr.readyState == 4) {
                         console.log(xhr.responseText);
-                        let contentHtml = getContent(xhr.responseText);
+                        let contentHtml = getContentVNDICT(xhr.responseText);
                         port.postMessage({
                             type: msg.type,
                             value: contentHtml

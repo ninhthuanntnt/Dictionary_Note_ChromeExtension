@@ -27,9 +27,6 @@
 			],
 			"css" : [
 				"styles/main.css"
-			],
-			"web_accessible_resources" : [
-				"*.ttf"
 			]
 		}
 	],

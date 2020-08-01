@@ -11,20 +11,42 @@
 <body>
     <div>
         <form class="ntnt-setting-language">
-            <label for="choose-language">Destination language: </label>
+            <label for="choose-language">Dictionary: </label>
             <select class="ntnt-select-box ntnt-select-box--border" name="language" id="choose-language">
                 <option class="ntnt-select-box__option" value="vi_en">Việt Nam - Tiếng Anh</option>
                 <option class="ntnt-select-box__option" value="en_vi">English - Vietnamese</option>
             </select>
         </form>
     </div>
+    <hr noshade="noshape">
     <div>
-        <form class="ntnt-traslate-box">
-            <label for="data-translate">Enter text here</label>
-            <textarea id="" cols="10" rows="5" class="ntnt-traslate-box__input"></textarea>
-            <button class="ntnt-traslate-box__btn">Translate</button>
+        <form class="ntnt-traslate-box" id="ntnt-translate-text-form">
+            <label for="data-translate">Translate text:</label>
+            <div class="ntnt-translate-box__choose-language">
+                <div>
+                    <select class="ntnt-select-box ntnt-select-box--border ntnt-source-lang" id="src-lang" name="from">
+                        <option value="10">Vietnamese</option>
+                        <option value="4" selected>English</option>
+                    </select>
+                </div>
+                <div>
+                    <ntnt>🡢</ntnt>
+                </div>
+                <div>
+                    <select class="ntnt-select-box ntnt-select-box--border ntnt-destination-lang" id="dest-lang" name="to">
+                        <option value="10" selected>Vietnamese</option>
+                        <option value="4">English</option>
+                    </select>
+                </div>
+            </div>
+            <textarea name="source" id="ntnt-text" cols="10" rows="5" class="ntnt-traslate-box__input" placeholder="Enter text here..."></textarea>
+            <button type="submit" class="ntnt-traslate-box__btn" id="ntnt-btn-submit-text">Translate</button>
         </form>
+        <div id="ntnt-translated-text">
+
+        </div>
     </div>
+    <hr noshade="noshape">
     <div class="ntnt-dictionaries">
         <p>Your words</p>
         <ul id="ntnt-data-note">
