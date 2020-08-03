@@ -3,7 +3,6 @@ let currentWord = null;
 let isLoading = true;
 let translatePopup = document.createElement('div');
 let btnTranslate = this.document.createElement("button");
-
 // init html
 translatePopup.setAttribute('class', 'content-popup');
 translatePopup.setAttribute('id', POP_UP_TRANSLATE_ID);
@@ -24,27 +23,23 @@ document.body.addEventListener('mousedown', (e) => {
     hideElement(btnTranslate)
 });
 
+
 document.body.addEventListener('mouseup', (event) => {
     //get text to translate
-    let text = "";
-    if (window.getSelection) {
-
-        text = window.getSelection().toString();
-
-    } else if (document.selection && document.selection.type != "Control") {
-
-        text = document.selection.createRange().text;
-
-    }
+    
+    let text = window.getSelection().toString();
+    let selection = window.getSelection();
     currentWord = text;
     //get position of cursor to show button translate
     let btnTranslate = document.getElementById(BTN_TRANSLATE_ID);
 
     if (text.trim() != "") {
-        console.log(text);
         isSelecting = true;
         let posX = event.pageX;
-        let posY = event.pageY;
+        let posY = selection.getRangeAt(0).getBoundingClientRect().bottom;
+
+        console.log("X:", posX, "Y:",posY);
+        console.log("Bounding rect", selection.getRangeAt(0).getBoundingClientRect());
 
         if (btnTranslate.style.display == 'none') {
             console.log('create new button');
@@ -53,6 +48,8 @@ document.body.addEventListener('mouseup', (event) => {
             btnTranslate.onmouseup = (e) => {
 
                 hideElement(btnTranslate);
+
+                // translatePopup.innerHTML = "";
                 showPopupAt(posX, posY);
 
                 e.stopPropagation();
@@ -96,7 +93,6 @@ function removeElement(el) {
 
 function setDataToTranslatePopup(innerDiv) {
     translatePopup.innerHTML = "";
-
     if (innerDiv.innerText.trim().length > 0) {
         translatePopup.append(innerDiv);
 
@@ -149,5 +145,4 @@ function showPopupAt(posX, posY) {
         translatePopup.style.opacity = 1;
         translatePopup.style.transform = 'translateX(5px)';
     }, 1);
-
 }

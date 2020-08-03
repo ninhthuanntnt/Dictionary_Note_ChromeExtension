@@ -2,6 +2,7 @@
     --primary: #3366ff;
     --primary-dark: #0033cc; 
     --del: #ff6666;
+    --del-dark: #ca4949;
 }
 body{
     font-family: 'Varela Round';
@@ -112,15 +113,24 @@ textarea{
 .ntnt-data-note__row:hover{
     border-radius: 10px;
 }
-.ntnt-data-note__row:hover::after{
-    content: "X";
-    font-weight: 800;
-    padding: 5px;
+.ntnt-data-note__btn-delete-word{
+    display: none;
+
+    font-size: 1.3em;
+    font-weight: 600;
 
     position: absolute;
     right: 0px;
     top: 0px;
 
     background-color: var(--del);
+    border: none;
     border-radius: 5px;
+}
+.ntnt-data-note__btn-delete-word:focus{
+    outline: none;
+    background-color: var(--del-dark);
+}
+.ntnt-data-note__row:hover > .ntnt-data-note__btn-delete-word{
+    display: block;
 }

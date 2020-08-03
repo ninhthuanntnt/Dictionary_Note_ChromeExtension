@@ -71,34 +71,44 @@ btnSubmitText.onclick = function (e) {
 if (datas) {
     for (let data of datas.savedWord) {
         let liTag = document.createElement('li');
-        let pTagInLiTag = document.createElement('p');
-        let ulTagInLiTag = document.createElement('ul');
-        let liTagInUlTag = document.createElement('li');
+        let liTagContentHtml = `
+            <p class="ntnt-data-note__word-header"></p>
+            <button class="ntnt-data-note__btn-delete-word">&#215;</button>
+            <ul>
+                <li class="ntnt-data-note__word-content"></li>
+            </ul>
+        `
+        // let pTagInLiTag = document.createElement('p');
+        // let ulTagInLiTag = document.createElement('ul');
+        // let liTagInUlTag = document.createElement('li');
 
         //add class
         liTag.classList.add('ntnt-data-note__row');
-        pTagInLiTag.classList.add('ntnt-data-note__word-header');
-        liTagInUlTag.classList.add('ntnt-data-note__word-content');
+        // pTagInLiTag.classList.add('ntnt-data-note__word-header');
+        // liTagInUlTag.classList.add('ntnt-data-note__word-content');
+        liTag.innerHTML = liTagContentHtml;
+        let rootWordTag = liTag.firstElementChild;
+        let translatedWordTag = liTag.lastElementChild.firstElementChild;
+        rootWordTag.innerText = data.rootWord;
+        translatedWordTag.innerText = data.translatedWord;
 
-        pTagInLiTag.innerText = data.rootWord;
-        liTagInUlTag.innerText = data.translatedWord;
-
-        ulTagInLiTag.append(liTagInUlTag);
-        liTag.append(pTagInLiTag);
-        liTag.append(ulTagInLiTag);
+        // ulTagInLiTag.append(liTagInUlTag);
+        // liTag.append(pTagInLiTag);
+        // liTag.append(ulTagInLiTag);
         document.getElementById(divDatasId).append(liTag);
     }
 }
 
 // add event click
-Array.from(document.getElementsByClassName('ntnt-data-note__row')).forEach(obj => {
+Array.from(document.getElementsByClassName('ntnt-data-note__btn-delete-word')).forEach(obj => {
     obj.onclick = function () {
-        console.log(this.querySelector('p').innerText);
-        let curWord = this.querySelector('p').innerText;
+        let parentTag = this.parentElement;
+        console.log(parentTag.querySelector('p').innerText);
+        let curWord = parentTag.querySelector('p').innerText;
 
         deleteWord(curWord);
 
-        this.remove();
+        parentTag.remove();
     }
 });
 

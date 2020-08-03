@@ -49,6 +49,7 @@ p{
 }
 
 .ntnt-row-data{
+    width: 100%;
     padding: 5px 5px;
 
     display: flex;
@@ -62,13 +63,10 @@ p{
 }
 
 .ntnt-row-data__btn-add{
-    width: 30px;
-    height: 30px;
-    margin-left: 10px;
+    min-width: 30px;
+    max-width: 30px;
+    margin-left: 5px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
     opacity: 0;
 
     border: 2px solid var(--light-blue);
@@ -76,7 +74,10 @@ p{
 
     transition: opacity 0.2s;
 }
-
+.ntnt-row-data__btn-add:focus{
+    outline: none;
+    background-color: var(--light-blue);
+}
 .ntnt-row-data:hover > .ntnt-row-data__btn-add{
     opacity: 0.8;
 }
