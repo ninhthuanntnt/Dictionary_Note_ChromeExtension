@@ -1,7 +1,7 @@
 {
-	"name" : "Translate and note",
+	"name" : "Translate and note v1.0.2",
 	"description" : "This extension'll support you to translate words. Then you can note this words to learn it later",
-	"version" : "1.0.0",
+	"version" : "1.0.2",
 	"manifest_version" : 2,
 	"browser_action" : {
 		"default_title" : "NTNT",

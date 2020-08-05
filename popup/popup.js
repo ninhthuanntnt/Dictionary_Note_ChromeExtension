@@ -2,15 +2,6 @@ var port2 = chrome.runtime.connect(null, { name: 'port2' });
 var datas = JSON.parse(localStorage.getItem(NTNT_LOCAL_STORAGE_KEY));
 var divDatasId = 'ntnt-data-note';
 
-let xhrTest = new XMLHttpRequest();
-xhrTest.open('GET', 'https://api.tracau.vn/WBBcwnwQpV89/s/H%C3%B4m%20nay%20t%C3%B4i%20vui/vi');
-xhrTest.onreadystatechange = () => {
-    if (xhrTest.status == 200 && xhrTest.readyState == 4) {
-        console.log(xhrTest.responseText);
-    }
-};
-xhrTest.send();
-
 // set default selected;
 var langOptions = document.querySelectorAll(".ntnt-select-box__option");
 Array.from(langOptions).forEach(
@@ -123,7 +114,7 @@ function deleteWord(word) {
 }
 
 function getContentFromILOVETRANSLATION(datas) {
-    console.log(typeof datas);
+    console.log(datas);
 
     if (typeof (datas) == 'string' || datas instanceof string) {
         datas = JSON.parse(datas);
@@ -136,7 +127,7 @@ function getContentFromILOVETRANSLATION(datas) {
     if (translatedText == "undefined" || translatedText == undefined)
         pTag.innerText = "Can't translate";
     else
-        pTag.innerText = unescape(obj["n_r"]);
+        pTag.innerText = unescape(translatedText);
 
     divTag.append(pTag);
 

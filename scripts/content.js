@@ -3,17 +3,23 @@ let currentWord = null;
 let isLoading = true;
 let translatePopup = document.createElement('div');
 let btnTranslate = this.document.createElement("button");
+
 // init html
+// init translated text popup
+
 translatePopup.setAttribute('class', 'content-popup');
 translatePopup.setAttribute('id', POP_UP_TRANSLATE_ID);
 hideElement(translatePopup);
 document.body.append(translatePopup);
 
+
+// init translation button
 btnTranslate.setAttribute('id', BTN_TRANSLATE_ID);
 btnTranslate.innerText = 'Translate';
 hideElement(btnTranslate);
 document.body.append(btnTranslate);
 
+//override body mousedown to hide button and popup
 document.body.addEventListener('mousedown', (e) => {
     console.log('mouse down');
     let btnTranslate = this.document.getElementById(BTN_TRANSLATE_ID);
@@ -26,20 +32,14 @@ document.body.addEventListener('mousedown', (e) => {
 
 document.body.addEventListener('mouseup', (event) => {
     //get text to translate
-    
     let text = window.getSelection().toString();
     let selection = window.getSelection();
     currentWord = text;
-    //get position of cursor to show button translate
-    let btnTranslate = document.getElementById(BTN_TRANSLATE_ID);
 
     if (text.trim() != "") {
         isSelecting = true;
         let posX = event.pageX;
-        let posY = selection.getRangeAt(0).getBoundingClientRect().bottom;
-
-        console.log("X:", posX, "Y:",posY);
-        console.log("Bounding rect", selection.getRangeAt(0).getBoundingClientRect());
+        let posY = selection.getRangeAt(0).getBoundingClientRect().bottom + window.scrollY;
 
         if (btnTranslate.style.display == 'none') {
             console.log('create new button');
@@ -92,34 +92,24 @@ function removeElement(el) {
 }
 
 function setDataToTranslatePopup(innerDiv) {
+    console.log(innerDiv);
+
     translatePopup.innerHTML = "";
-    if (innerDiv.innerText.trim().length > 0) {
-        translatePopup.append(innerDiv);
 
-        Array.from(document.getElementsByClassName('ntnt-row-data__btn-add')).forEach((e) => {
-            e.onclick = () => {
-                var data = e.previousSibling.innerText;
-                port1.postMessage({
-                    type: 'word-add',
-                    value: {
-                        rootWord: currentWord,
-                        translatedWord: data
-                    }
-                });
-            }
-        });
-    } else {
-        let pTemp1 = document.createElement('p'), pTemp2 = document.createElement('p');
-        pTemp1.innerText = 'Không có kết quả';
-        pTemp1.style.color = 'var(--light-red)';
-        pTemp1.style.fontWeight = 600;
+    translatePopup.append(innerDiv);
 
-        pTemp2.innerText = '(Từ không nên có đuôi \'s\',\'ed\',\'ing\' để tăng độ chính xác)';
-        pTemp2.style.color = 'var(--light-blue)';
-        pTemp2.style.fontWeight = 500;
-        translatePopup.append(pTemp1);
-        translatePopup.append(pTemp2);
-    }
+    Array.from(document.getElementsByClassName('ntnt-row-data__btn-add')).forEach((e) => {
+        e.onclick = () => {
+            var data = e.previousSibling.innerText;
+            port1.postMessage({
+                type: 'word-add',
+                value: {
+                    rootWord: currentWord,
+                    translatedWord: data
+                }
+            });
+        }
+    });
 
 }
 

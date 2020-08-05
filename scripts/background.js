@@ -9,37 +9,53 @@ function getContentVNDICT(strHtml) {
 
     let returnDiv = document.createElement('div');
     let currentWord = htmlObj.querySelector('.thisword').innerText;
-    // Add header word
-    let h3Tag = document.createElement('h3');
-    h3Tag.innerText = currentWord;
-    h3Tag.style.color = 'var(--light-green)';
-    returnDiv.append(h3Tag);
 
-    let textNodeIterator = document.createNodeIterator(htmlObj, NodeFilter.SHOW_TEXT), textNode;
-    let i = 0;
 
-    while (textNode = textNodeIterator.nextNode()) {
-        let curText = textNode.textContent;
-        if (curText.trim().length != 0 && (i >= 12 && i <= 20)) {
-            let divWrapper = document.createElement('div');
-            let pTag = document.createElement('p');
-            let btnAddTag = document.createElement('button');
+    if (currentWord.trim().length == 0) {
+        let pTemp1 = document.createElement('p'), pTemp2 = document.createElement('p');
+        pTemp1.innerText = 'Không có kết quả';
+        pTemp1.style.color = 'var(--light-red)';
+        pTemp1.style.fontWeight = 600;
 
-            //create a btn tag and a p tag inside a row data
-            pTag.innerText = curText;
-            btnAddTag.innerHTML = '<b>+</b>';
+        pTemp2.innerText = '(Từ không nên có đuôi \'s\',\'ed\',\'ing\' để tăng độ chính xác)';
+        pTemp2.style.color = 'var(--light-blue)';
+        pTemp2.style.fontWeight = 500;
+        returnDiv.innerHTML = "";
+        returnDiv.append(pTemp1);
+        returnDiv.append(pTemp2);
+    } else {
+        // Add header word
+        let h3Tag = document.createElement('h3');
+        h3Tag.innerText = currentWord;
+        h3Tag.style.color = 'var(--light-green)';
+        returnDiv.append(h3Tag);
 
-            // init css
-            divWrapper.classList.add('ntnt-row-data');
-            btnAddTag.classList.add('ntnt-row-data__btn-add');
+        let textNodeIterator = document.createNodeIterator(htmlObj, NodeFilter.SHOW_TEXT), textNode;
+        let i = 0;
 
-            // append tags
-            divWrapper.append(pTag);
-            divWrapper.append(btnAddTag);
+        while (textNode = textNodeIterator.nextNode()) {
+            let curText = textNode.textContent;
+            if (curText.trim().length != 0 && (i >= 12 && i <= 20)) {
+                let divWrapper = document.createElement('div');
+                let pTag = document.createElement('p');
+                let btnAddTag = document.createElement('button');
 
-            returnDiv.append(divWrapper);
+                //create a btn tag and a p tag inside a row data
+                pTag.innerText = curText;
+                btnAddTag.innerHTML = '<b>+</b>';
+
+                // init css
+                divWrapper.classList.add('ntnt-row-data');
+                btnAddTag.classList.add('ntnt-row-data__btn-add');
+
+                // append tags
+                divWrapper.append(pTag);
+                divWrapper.append(btnAddTag);
+
+                returnDiv.append(divWrapper);
+            }
+            i++;
         }
-        i++;
     }
 
     return {
@@ -72,35 +88,35 @@ chrome.runtime.onConnect.addListener(port => {
                 xhr.send();
 
             }
-            if(msg.type == 'word-add'){
+            if (msg.type == 'word-add') {
                 addToLocalStorage(msg.value);
             }
-            
+
         });
     }
-    if(port.name == "port2"){
+    if (port.name == "port2") {
         port.onMessage.addListener(function (msg, sender) {
-            if(msg.type == "change-lang-code"){
+            if (msg.type == "change-lang-code") {
                 langCode = msg.value;
             }
         });
     }
 });
 
-function addToLocalStorage(object){
+function addToLocalStorage(object) {
     let strData = localStorage.getItem(NTNT_LOCAL_STORAGE_KEY);
     let existed = false;
     let curData = JSON.parse(strData);
 
-    curData.savedWord.map(obj =>{
-        if(obj.rootWord == object.rootWord){
+    curData.savedWord.map(obj => {
+        if (obj.rootWord == object.rootWord) {
             obj.translatedWord = object.translatedWord;
             existed = true;
         }
         return obj;
     });
 
-    if(!existed)
+    if (!existed)
         curData.savedWord.push(object);
 
     //save to local storage
