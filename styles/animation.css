@@ -1,0 +1,89 @@
+.ntnt-loading-animation{
+    position: relative;
+}
+
+.ntnt-loading-animation-spiral > div{
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    
+}
+.ntnt-loading-animation-spiral{
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    animation: 3s linear infinite reverse both ntnt-rotation;
+
+    /* overflow: hidden; */
+
+    --start-width: 4px;
+    --step-width: 4px;
+    --border-length: 1.5px;
+    --addition-translate: -1.31px;
+}
+.ntnt-loading-animation-spiral > div:nth-child(1){
+    width: var(--start-width);
+    height: var(--start-width);
+
+    border: var(--border-length) solid transparent;
+    border-top: var(--border-length) solid black;
+    border-right: var(--border-length) solid black;
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+}
+.ntnt-loading-animation-spiral > div:nth-child(2){
+    width: calc(var(--start-width) + var(--step-width));
+    height: calc(var(--start-width) + var(--step-width));
+
+    border: var(--border-length) solid transparent;
+    border-bottom: var(--border-length) solid black;
+    border-left: var(--border-length) solid black;
+    border-radius: 50%;
+
+    transform: translate( calc(var(--addition-translate) - 50%), calc(var(--addition-translate) - 50% - 0.2px));
+}
+
+.ntnt-loading-animation-spiral > div:nth-child(3){
+    width: calc(var(--start-width) + 2*var(--step-width));
+    height: calc(var(--start-width) + 2*var(--step-width));
+
+    border: var(--border-length) solid transparent;
+    border-top: var(--border-length) solid black;
+    border-right: var(--border-length) solid black;
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+}
+.ntnt-loading-animation-spiral > div:nth-child(4){
+    width: calc(var(--start-width) + 3*var(--step-width));
+    height: calc(var(--start-width) + 3*var(--step-width));
+    
+    border: var(--border-length) solid transparent;
+    border-bottom: var(--border-length) solid black;
+    border-left: var(--border-length) solid black;
+    border-radius: 50%;
+
+    transform: translate( calc(var(--addition-translate) - 50%), calc(var(--addition-translate) - 50% - 0.2px));
+}
+.ntnt-loading-animation-spiral > div:nth-child(5){
+    width: calc(var(--start-width) + 4*var(--step-width));
+    height: calc(var(--start-width) + 4*var(--step-width));
+
+    border: var(--border-length) solid transparent;
+    border-top: var(--border-length) solid black;
+    border-right: var(--border-length) solid black;
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+@keyframes ntnt-rotation{
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform:  rotate(360deg);
+    }
+}

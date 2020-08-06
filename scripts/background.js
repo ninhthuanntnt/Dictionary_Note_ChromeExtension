@@ -72,6 +72,26 @@ chrome.runtime.onConnect.addListener(port => {
             if (msg.type == 'word') {
 
                 console.log(langCode);
+                //================Test loading=====================
+                // let promise = new Promise((resolve, reject) => {
+                //     resolve();
+                // });
+
+                // promise.then(setTimeout(function () {
+                //     let xhr = new XMLHttpRequest();
+                //     xhr.open('GET', `http://vndic.net/index.php?word=${msg.value}&dict=${langCode}`);
+                //     xhr.onreadystatechange = () => {
+                //         if (xhr.status == 200 && xhr.readyState == 4) {
+                //             console.log(xhr.responseText);
+                //             let contentHtml = getContentVNDICT(xhr.responseText);
+                //             port.postMessage({
+                //                 type: msg.type,
+                //                 value: contentHtml
+                //             });
+                //         }
+                //     };
+                //     xhr.send();
+                // }, 1000));
                 //get the translated data by using ajax
                 let xhr = new XMLHttpRequest();
                 xhr.open('GET', `http://vndic.net/index.php?word=${msg.value}&dict=${langCode}`);

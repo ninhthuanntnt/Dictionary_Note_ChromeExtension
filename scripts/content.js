@@ -1,8 +1,19 @@
-let port1 = chrome.runtime.connect(null, { name: 'port1' });
+let port1 = null;
 let currentWord = null;
 let isLoading = true;
 let translatePopup = document.createElement('div');
 let btnTranslate = this.document.createElement("button");
+let animationLoadingHTMLStr = `<div id = "${POP_UP_TRANSLATE_LOADING_ID}" 
+                                    style="display: flex; justify-content:  center;">
+                                    <div class="ntnt-loading-animation ntnt-loading-animation-spiral">
+
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </div>`;
 
 // init html
 // init translated text popup
@@ -26,11 +37,15 @@ document.body.addEventListener('mousedown', (e) => {
     let translatePopup = document.getElementById(POP_UP_TRANSLATE_ID);
 
     hideElement(translatePopup);
-    hideElement(btnTranslate)
+    hideElement(btnTranslate);
+
+    (port1) ? port1.disconnect() : null;
 });
 
 
 document.body.addEventListener('mouseup', (event) => {
+    port1 = chrome.runtime.connect(null, { name: 'port1' });
+    console.log("Mouse up hus");
     //get text to translate
     let text = window.getSelection().toString();
     let selection = window.getSelection();
@@ -48,7 +63,6 @@ document.body.addEventListener('mouseup', (event) => {
             btnTranslate.onmouseup = (e) => {
 
                 hideElement(btnTranslate);
-
                 // translatePopup.innerHTML = "";
                 showPopupAt(posX, posY);
 
@@ -60,6 +74,7 @@ document.body.addEventListener('mouseup', (event) => {
         }
         // connect to background.js
 
+        startLoading();
         port1.postMessage({ type: 'word', value: text });
 
         port1.onMessage.addListener(function (msg, sender) {
@@ -76,7 +91,6 @@ document.body.addEventListener('mouseup', (event) => {
                 translatePopup.onmouseup = (e) => {
                     e.stopPropagation();
                 }
-                // port1.disconnect();
             }
         });
 
@@ -113,6 +127,14 @@ function setDataToTranslatePopup(innerDiv) {
 
 }
 
+function startLoading() {
+    translatePopup.innerHTML = animationLoadingHTMLStr;
+}
+
+function stopLoading() {
+    let loadingDiv = document.getElementById(POP_UP_TRANSLATE_LOADING_ID);
+    (loadingDiv) ? loadingDiv.remove() : null;
+}
 function showElement(element, posX = "0px", posY = "0px") {
     element.style.display = "block";
 

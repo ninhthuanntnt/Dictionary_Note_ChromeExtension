@@ -26,7 +26,8 @@
 				"scripts/content.js"
 			],
 			"css" : [
-				"styles/main.css"
+				"styles/main.css",
+				"styles/animation.css"
 			]
 		}
 	],
