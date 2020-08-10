@@ -8,8 +8,9 @@ p{
 }
 #ntnt-page-btn-translate {
     width: fit-content;
-    height: 2.2em;
-    font-size: 1.1em;
+    height: 30px !important;
+    padding: 0 5px;
+    font-size: 16px;
     font-weight: 600;
 
     position: absolute;
@@ -20,6 +21,8 @@ p{
 
     border: 2px solid var(--light-green);
     border-radius: 10px;
+
+    box-shadow: none;
 }
 
 #ntnt-page-btn-translate:hover {
@@ -67,16 +70,20 @@ p{
     max-width: 30px;
     margin-left: 5px;
 
+    text-align: center !important;
+
     opacity: 0;
 
-    border: 2px solid var(--light-blue);
-    border-radius: 10px;
+    border: 2px solid var(--light-blue) !important;
+    border-radius: 10px !important;
 
-    transition: opacity 0.2s;
+    box-shadow: none !important;
+
+    transition: opacity 0.2s !important;
 }
 .ntnt-row-data__btn-add:focus{
     outline: none;
-    background-color: var(--light-blue);
+    background-color: var(--light-blue) !important;
 }
 .ntnt-row-data:hover > .ntnt-row-data__btn-add{
     opacity: 0.8;
